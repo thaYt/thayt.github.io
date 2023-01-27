@@ -1,29 +1,41 @@
 <script>
   // links
   var spTopURL = "https://spotify-top.com/user/pvl8wlfg5qdcoxs42xidk0zop",
-    nameMCURL = "https://namemc.com/profile/thaYt.1",
     githubURL = "https://github.com/thaYt",
-    aaclnTwitch = "https://twitch.tv/aacln",
     scloud = "https://soundcloud.com/coredd",
     discord = "core#1011";
 
   import { base } from "$app/paths";
   import { onMount } from "svelte/internal";
-  import pfp from '$lib/assets/pfp.png';
+
+  import pfp from "$lib/assets/pfp.png";
+  import Discord from "$lib/svg/discord.svelte";
+  import Github from "$lib/svg/github.svelte";
+  import Soundcloud from "$lib/svg/soundcloud.svelte";
+  import Spotify from "$lib/svg/spotify.svelte";
 
   let card;
-  let speed = 2.5;
-  let steps = 10;
-
+  let speed = 100;
+  let steps = 12;
   let deltaRotation = -1;
+
+  let loaded = false;
 
   onMount(() => {
     card = document.getElementsByTagName("card")[0];
-    card.style.webkitTransform = card.style.transform =
-      "rotate3d(10, 180, 50, " +
-      (window.screenX > 50 ? window.screenX / -30 + 20 : 0) +
-      "deg)";
+    loaded = true;
   });
+
+  let discordPopup,
+    discCopied = false;
+
+  function copyDiscord() {
+    navigator.clipboard.writeText(discord);
+    discCopied = true;
+    setTimeout(() => {
+      discCopied = false;
+    }, 5000);
+  }
 
   function easeBack() {
     let rotation = parseFloat(
@@ -39,6 +51,7 @@
     );
     setTimeout(() => {
       rotation -= deltaRotation;
+      // thank you formatter!!!
       if ((deltaRotation > 0 && rotation < 0) || (deltaRotation < 0 && rotation > 0)) {
         rotation = 0;
         card.style.webkitTransform = card.style.transform =
@@ -53,57 +66,95 @@
   }
 </script>
 
+<a
+  href="https://github.com/thaYt/thayt.github.io"
+  target="_blank"
+  rel="noreferrer noopener"
+>
+  <div id="ghlogo"><Github /></div>
+</a>
+
 <body href="{base}/">
-  <img src={pfp} alt="pfp">
-  <a
-    href="https://github.com/thaYt/thayt.github.io"
-    target="_blank"
-    rel="noreferrer noopener"
-    ><svg
-      id="ghlogo"
-      xmlns="http://www.w3.org/2000/svg"
-      width="50"
-      height="50"
-      viewBox="0 0 24 24"
-      ><path
-        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
-      /></svg
-    >
-  </a>
   <card
-    on:mouseleave={easeBack}
     on:mousemove={(e) => {
       card.style.webkitTransform = card.style.transform =
-        "rotate3d(10, 180, 50, " + (e.pageX / -30 + 30) + "deg)";
+        "rotate3d(10, 180, 50, " + (e.pageX / -30 + 32.5) + "deg)";
     }}
+    on:mouseleave={easeBack}
   >
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <h1>a</h1>
+    <img src={pfp} alt="pfp" id="pfp" />
+    <h1 id="name">hey, i'm core!</h1>
+    <p id="info">
+      i'm a backend developer that works with svelte, typescript, golang, and
+      some others.
+    </p>
+
+    <div class="bottom">
+      <p>links:</p>
+      <ul>
+        <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+        <li
+          id="discord"
+          on:mouseover={() => (discordPopup = true)}
+          on:mouseleave={() => (discordPopup = false)}
+          on:mousedown={copyDiscord}
+        >
+          {#if discordPopup}
+            <div class="popup">
+              <p>{discCopied == true ? "copied!" : discord}</p>
+            </div>
+          {/if}
+          <Discord />
+        </li>
+        <li id="github">
+          <a href={githubURL} target="_blank" rel="noreferrer noopener">
+            <Github />
+          </a>
+        </li>
+        <li id="soundcloud">
+          <a href={scloud} target="_blank" rel="noreferrer noopener">
+            <Soundcloud />
+          </a>
+        </li>
+        <li id="spotify">
+          <a href={spTopURL} target="_blank" rel="noreferrer noopener">
+            <Spotify />
+          </a>
+        </li>
+      </ul>
+    </div>
   </card>
 </body>
 
 <style>
+  * {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    font-family: "Gill Sans", sans-serif;
+    /* thanks browsers!!! */
+  }
+
   body {
-    background-color: #112;
+    background-color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   card {
-    background-color: #22223d77;
+    border-color: #000;
+    border-style: solid;
     position: absolute;
-    width: 30%;
-    top: 35%;
-    height: 35%;
-    border-radius: 10px;
-    backdrop-filter: blur(2ex);
+    width: 43%;
+    top: 20%;
+    height: 50%;
+    padding: 20px;
   }
 
   h1 {
-    font-family: "Gill Sans", sans-serif;
-    color: #fff;
-    filter: drop-shadow(0 0 0.05rem #fff);
+    color: #000;
+    filter: drop-shadow(0 0 0.05rem #aaa);
     margin-left: 25px;
   }
 
@@ -111,6 +162,63 @@
     position: absolute;
     right: 10px;
     top: 10px;
-    filter: drop-shadow(5px, 5px, 5px white);
+    filter: drop-shadow(5px, 5px, 5px, white);
+  }
+
+  #pfp {
+    border-radius: 20px;
+    width: 100px;
+    filter: drop-shadow(5px, 5px, 5px, black);
+    -webkit-filter: drop-shadow(5px, 5px, 5px black);
+  }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  li {
+    float: left;
+  }
+
+  #discord,
+  #ghlogo {
+    fill: black;
+  }
+
+  #name {
+    margin-left: 0%;
+    top: 37.5%;
+    text-shadow: #ccc 2px 2px 0.5px;
+  }
+
+  #info {
+    text-shadow: #aaa 2px 2px 0.5ex;
+    top: 43.5%;
+  }
+
+  .bottom {
+    position: absolute;
+    bottom: 10px;
+  }
+
+  li:not(:last-child) {
+    padding-right: 10px;
+  }
+
+  .popup {
+    position: absolute;
+    top: -5px;
+    left: 12.5%;
+    transform: translateX(-50%);
+    color: black;
+    background-color: #fff;
+    border-radius: 10px;
+    border-color: #000;
+    border-style: solid;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 </style>
