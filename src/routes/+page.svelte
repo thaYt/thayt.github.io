@@ -3,7 +3,8 @@
   var spTopURL = "https://spotify-top.com/user/pvl8wlfg5qdcoxs42xidk0zop",
     githubURL = "https://github.com/thaYt",
     scloud = "https://soundcloud.com/coredd",
-    discord = "core#1011";
+    discord = "core#1011",
+    rosePineRepo = "https://github.com/rose-pine/rose-pine-theme";
 
   import { base } from "$app/paths";
   import { onMount } from "svelte/internal";
@@ -52,7 +53,10 @@
     setTimeout(() => {
       rotation -= deltaRotation;
       // thank you formatter!!!
-      if ((deltaRotation > 0 && rotation < 0) || (deltaRotation < 0 && rotation > 0)) {
+      if (
+        (deltaRotation > 0 && rotation < 0) ||
+        (deltaRotation < 0 && rotation > 0)
+      ) {
         rotation = 0;
         card.style.webkitTransform = card.style.transform =
           "rotate3d(10, 180, 50, " + rotation + "deg)";
@@ -74,6 +78,14 @@
   <div id="ghlogo"><Github /></div>
 </a>
 
+<p id="contact">
+  contact me on discord/core#1011 | <a
+    href={rosePineRepo}
+    target="_blank"
+    rel="noreferrer noopener">color theme based on rose pine</a
+  >
+</p>
+
 <body href="{base}/">
   <card
     on:mousemove={(e) => {
@@ -84,13 +96,10 @@
   >
     <img src={pfp} alt="pfp" id="pfp" />
     <h1 id="name">hey, i'm core!</h1>
-    <p id="info">
-      i'm a backend developer that works with svelte, typescript, golang, and
-      some others.
-    </p>
+    <p id="info">i do things on the internet, some examples in links!</p>
 
     <div class="bottom">
-      <p>links:</p>
+      <p id="info">links:</p>
       <ul>
         <!-- svelte-ignore a11y-mouse-events-have-key-events -->
         <li
@@ -131,30 +140,29 @@
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
-    font-family: "Gill Sans", sans-serif;
     /* thanks browsers!!! */
   }
 
   body {
-    background-color: #fff;
+    background-color: #191724;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   card {
-    border-color: #000;
+    border-color: #ddb8ff;
     border-style: solid;
     position: absolute;
     width: 43%;
     top: 20%;
     height: 50%;
     padding: 20px;
+    background-color: #332f4a;
   }
 
   h1 {
-    color: #000;
-    filter: drop-shadow(0 0 0.05rem #aaa);
+    color: #ddb8ff;
     margin-left: 25px;
   }
 
@@ -162,7 +170,6 @@
     position: absolute;
     right: 10px;
     top: 10px;
-    filter: drop-shadow(5px, 5px, 5px, white);
   }
 
   #pfp {
@@ -184,19 +191,23 @@
   }
 
   #discord,
-  #ghlogo {
-    fill: black;
+  #ghlogo,
+  #github,
+  #spotify,
+  #soundcloud {
+    fill: #e0b6ff;
   }
 
   #name {
     margin-left: 0%;
     top: 37.5%;
-    text-shadow: #ccc 2px 2px 0.5px;
+    text-shadow: #000 2px 2px 0.5px;
   }
 
   #info {
-    text-shadow: #aaa 2px 2px 0.5ex;
+    text-shadow: #000 2px 2px 0.5ex;
     top: 43.5%;
+    color: #ddb8ff;
   }
 
   .bottom {
@@ -214,11 +225,24 @@
     left: 12.5%;
     transform: translateX(-50%);
     color: black;
-    background-color: #fff;
+    background-color: #505;
     border-radius: 10px;
     border-color: #000;
     border-style: solid;
     padding-left: 10px;
     padding-right: 10px;
+  }
+
+  #contact {
+    text-shadow: #000 2px 2px 0.25px;
+    position: absolute;
+    bottom: 5px;
+    transform: translateX(-50%);
+    left: 50%;
+    color: #ddb8ff;
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    text-decoration: none;
   }
 </style>
